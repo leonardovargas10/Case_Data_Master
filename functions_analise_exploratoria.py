@@ -99,7 +99,7 @@ def plota_grafico_linhas(df, x, y, title):
     plt.show()
 
 def analisa_distribuicao_via_percentis(df, variaveis):
-    def highlight_percentiles(s):
+    def sublinha_percentis(s):
         is_1_percentile = s.name == '1%'
         is_99_8_percentile = s.name == '99.8%'
         if is_1_percentile or is_99_8_percentile:
@@ -107,7 +107,7 @@ def analisa_distribuicao_via_percentis(df, variaveis):
         else:
             return [''] * len(s)
 
-    percentis = df[variaveis].describe(percentiles = [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.975, 0.99, 0.995, 0.998]).style.apply(highlight_percentiles, axis=1)    
+    percentis = df[variaveis].describe(percentiles = [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.975, 0.99, 0.995, 0.998]).style.apply(sublinha_percentis, axis=1)    
 
     return percentis
 
@@ -142,19 +142,19 @@ def compara_medias_amostras(df, variavel):
 
 
     # Cria separa entre quem é Churn e quem não é Churn
-    df_eda_continuas_com_churn = df_eda_continuas.loc[df_eda_continuas["churn"] == 1]
-    df_eda_continuas_sem_churn = df_eda_continuas.loc[df_eda_continuas["churn"] == 0]
+    df_com_churn = df.loc[df["churn"] == 1]
+    df_sem_churn = df.loc[df["churn"] == 0]
 
     # Aplica o Teorema do Limite Central, gerando duas distribuições de médias amostras que aproximam-se de uma Normal
     medias_amostrais_com_churn = []
     medias_amostrais_sem_churn = []
 
     for i in range(10000):
-        amostra_churn = random.choices(df_eda_continuas_com_churn[variavel].values, k=1000)
+        amostra_churn = random.choices(df_com_churn[variavel].values, k=1000)
         media_amostra_churn = np.mean(amostra_churn)
         medias_amostrais_com_churn.append(media_amostra_churn)
 
-        amostra_sem_churn = random.choices(df_eda_continuas_sem_churn[variavel].values, k=1000)
+        amostra_sem_churn = random.choices(df_sem_churn[variavel].values, k=1000)
         media_amostra_sem_churn = np.mean(amostra_sem_churn)
         medias_amostrais_sem_churn.append(media_amostra_sem_churn)
 
