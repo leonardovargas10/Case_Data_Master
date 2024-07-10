@@ -78,25 +78,49 @@ def plota_barras(lista_variaveis, hue, df, linhas, colunas, titulo, rotation):
     ax.set_xticklabels(ax.get_xticklabels(), ha='right', fontsize=10)
     plt.show()
 
-def plota_grafico_linhas(df, x, y, title):
+def plota_grafico_linhas(df, x, y, nao_calcula_media, title):
 
-    # Criando o gráfico de linha
-    plt.figure(figsize=(14, 7))
-    plt.plot(df[x], df[y], marker='o', linestyle='-', color='#1FB3E5')
+    if nao_calcula_media:
+        # Criando o gráfico de linha
+        plt.figure(figsize=(10, 6))
+        plt.plot(df[x], df[y], marker='o', linestyle='-', color='#1FB3E5')
 
-    # Adicionando títulos e rótulos aos eixos
-    plt.title(title)
-    plt.xlabel(x)
-    plt.ylabel(y)
+        # Adicionando títulos e rótulos aos eixos
+        plt.title(title)
+        plt.xlabel(x)
+        plt.ylabel(y)
 
-    for i, txt in enumerate(df[y]):
-        plt.annotate(f'{txt:.2f}', (df[x][i], df[y][i]), textcoords="offset points", xytext=(0,10), ha='center')
+        for i, txt in enumerate(df[y]):
+            plt.annotate(f'{txt:.1f}', (df[x][i], df[y][i]), textcoords="offset points", xytext=(0,1), ha='center')
 
-    # Exibindo o gráfico
-    plt.grid(True)
-    plt.xticks(rotation=90)
-    plt.tight_layout()
-    plt.show()
+        # Exibindo o gráfico
+        plt.grid(True)
+        plt.xticks(rotation=90)
+        plt.tight_layout()
+        plt.show()
+    else:
+        media = df[y].mean()
+        # Criando o gráfico de linha
+        plt.figure(figsize=(10, 6))
+        plt.plot(df[x], df[y], marker='o', linestyle='-', color='#1FB3E5')
+
+        # Adicionando linha da média
+        plt.axhline(y=media, color='r', linestyle='--', linewidth=1, label=f'Média: {media:.2f}')
+        plt.legend()
+
+        # Adicionando títulos e rótulos aos eixos
+        plt.title(title)
+        plt.xlabel(x)
+        plt.ylabel(y)
+
+        for i, txt in enumerate(df[y]):
+            plt.annotate(f'{txt:.1f}', (df[x][i], df[y][i]), textcoords="offset points", xytext=(0,1), ha='center')
+
+        # Exibindo o gráfico
+        plt.grid(True)
+        plt.xticks(rotation=90)
+        plt.tight_layout()
+        plt.show()
 
 def analisa_distribuicao_via_percentis(df, variaveis):
     def sublinha_percentis(s):
